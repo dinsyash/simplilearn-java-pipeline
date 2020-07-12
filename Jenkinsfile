@@ -1,8 +1,9 @@
 pipeline {
 	agent any
 	stages {
-		stage ('Compile') {
+		stage ('Build Docker') {
 			steps {
+				sh 'sudo docker build -t javaimage .'
 				echo "Compiled successfully";
 			}
 		}
