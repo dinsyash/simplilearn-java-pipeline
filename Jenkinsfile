@@ -3,7 +3,7 @@ pipeline {
 	stages {
 		stage ('Build Docker') {
 			steps {
-				sh 'sudo docker build -t javaimage .'
+				sh 'docker build -t javaimage .'
 				echo "Compiled successfully";
 			}
 		}
