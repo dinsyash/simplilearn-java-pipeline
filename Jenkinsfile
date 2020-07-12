@@ -1,32 +1,26 @@
 pipeline {
 	agent any
 	stages {
-		stage ('Build Docker') {
+		stage ('Build Docker image') {
 			steps {
-				sh 'docker build -t javaimage .'
-				echo "Compiled successfully";
+				sh 'sudo -n docker build -t 7243/javaimage .'
 			}
 		}
-		stage ('Java') {
+		stage ('Push docker image') {
 			steps {
-				echo "Java passed successfully";
+			    withCredentials([string(credentialsId: 'docker-pwd', variable: 'DockerHubPwd')]) {
+                    sh "sudo -n docker login -u 7243 -p ${DockerHubPwd}"
+                }
+				sh 'sudo -n docker push 7243/javaimage'
 			}
 		}
-		stage ('Quality-Gate') {
+		stage ('Pull docker image') {
 			steps {
-				echo "Quality gate passed successfully";
-			}
-		}
-		stage ('Deploy') {
-			steps {
-				echo "Pass!!";
+				echo "sudo -n docker pull 7243/javaimage";
 			}
 		}
 	}
 	post {
-		always {
-			echo "This will always run";
-		}
 		success {
 			echo "This will run if successful";
 		}
